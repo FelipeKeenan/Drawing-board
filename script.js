@@ -50,6 +50,7 @@ function mouseDownEvent(e){
     //Achando a real posição do mouse dentro do canvas, levando em consideração que ele pega a tela toda.
     mouseX = e.pageX - screen.offsetLeft //A variável "pointX" vai nos dizer aonde está o mouse no eixo X.  "offsetLeft" vai nos dizer qual é a distância do elemento para o canto esquerdo da página
     mouseY = e.pageY - screen.offsetTop
+    screen.classList.add('drawing')
 
 
 }
@@ -67,6 +68,7 @@ function mouseMoveEvent(e){
 
 function mouseUpEvent(){
     canDraw = false
+    screen.classList.remove('drawing')
 }
 
 
@@ -90,6 +92,25 @@ function draw(x, y) {
 }
 
 function clearScreen(){
-    context.setTransform(1, 0, 0 , 1, 0, 0)
-    context.clearRect(0 , 0 , context.canvas.width, context.canvas.height)
+    fadeOut()
+}
+
+
+
+function fadeOut() {
+    let opacity = 1;
+    function animate() {
+        opacity -= 0.05; 
+        context.clearRect(0, 0, screen.width, screen.height);
+        context.fillStyle = 'rgba(255, 255, 255, ' + opacity + ')';
+        context.fillRect(0, 0, screen.width, screen.height);
+
+        if (opacity > 0) {
+            requestAnimationFrame(animate);
+        } else {
+            // Limpar totalmente o canvas quando a animação estiver completa
+            context.clearRect(0, 0, screen.width, screen.height);
+        }
+    }
+    animate();
 }
